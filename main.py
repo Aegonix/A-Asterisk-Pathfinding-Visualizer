@@ -94,6 +94,20 @@ class Node:
     
     def __sub__(self, other):
         return ((self.x - other.x) ** 2 + (self.y - other.y) ** 2) ** 0.5
+    
+    def reset(self):
+        # Reset all attributes to original state
+        self.is_start = False
+        self.is_target = False
+        self.parent = None
+        self.g = 0
+        self.h = 0
+        self.f = 0
+        self.is_wall = False
+        self.is_explored = False
+        self.is_selected = False
+        self.path_dist = 0
+        self.set_color()
 
 def pick_start_and_target(nodes):
     start = random.choice(nodes)
@@ -204,7 +218,15 @@ def main():
                     generator = pathfind(target_node)
                 if event.key == pygame.K_ESCAPE:
                     pathfinding = False
-
+                    current = start_node
+                if event.key == pygame.K_r:
+                    for node in nodes:
+                        node.reset()
+                    pathfinding = False
+                    start_node, target_node = pick_start_and_target(nodes)
+                    current = start_node
+                    create_obstacles(nodes)
+                    
         draw(nodes)
         pygame.display.update()
 
